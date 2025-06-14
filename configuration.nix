@@ -55,6 +55,9 @@
     enable = true;
     xwayland.enable = true;
   };
+  environment.sessionVariables = {
+    HYPRLAND_CONFIG_FILE = "~/Resources/Nixos/hyprland.conf";
+  };
 
   # Enable the Cinnamon Desktop Environment.
   #services.xserver.displayManager.lightdm.enable = true;

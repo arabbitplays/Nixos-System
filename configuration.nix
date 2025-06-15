@@ -1,13 +1,12 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./modules/desktop.nix
+      ./modules/users.nix
+      ./modules/shell.nix
     ];
 
   # Bootloader.
@@ -27,6 +26,8 @@
     options = "--delete-older-than 5d";
   };
   nix.settings.auto-optimise-store = true;
+
+  hypr-desktop.enable = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -55,33 +56,6 @@
     LC_TELEPHONE = "de_DE.UTF-8";
     LC_TIME = "de_DE.UTF-8";
   };
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.displayManager.gdm = {
-    enable = true;
-    wayland = true;
-  };
-
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
- 
- environment.sessionVariables = {
-  WLR_NO_HARDWARE_CURSORS = "1";
-  NISOS_OZONE_WL = "1";
- };
-
- hardware = {
-  # enable opengl
-  graphics.enable = true;
-  nvidia.modesetting.enable = true;
- };
-
-  # Enable the Cinnamon Desktop Environment.
-  #services.xserver.displayManager.lightdm.enable = true;
-  #services.xserver.desktopManager.cinnamon.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -114,29 +88,7 @@
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.oschdi = {
-    isNormalUser = true;
-    description = "Jakob Ostermann";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
-  };
-
-  # Install firefox.
   programs.firefox.enable = true;
-
-  programs.zsh.enable = true;
-  users.defaultUserShell = pkgs.zsh;
-
-  programs.zsh.ohMyZsh = {
-    enable = true;
-    # plugins = [ "git" "sudo" "docker" "kubectl" ];
-  };
 
   # Desktop portal for link opening, screensharing, ...
   xdg.portal.enable = true;
@@ -151,20 +103,9 @@
     git
     jetbrains.clion
     vscode
-    kitty # terminal emulator (for hyprland)
     obsidian
     thunderbird
     discord
-    rofi-wayland # launcher
-    nemo # filemanager
-    (waybar.overrideAttrs (oldAttrs: {
-      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-    })) # desktop bar
-    dunst # notification deamon
-    libnotify # notify dependency
-    swww # wallpaper manager
-    lxqt.lxqt-policykit # authenticaton manager for polkit
-    networkmanagerapplet
   ];
 
   fonts.packages = with pkgs; [

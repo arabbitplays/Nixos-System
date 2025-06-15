@@ -16,6 +16,18 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  # Automatic updating
+  #system.autoUpgrade.enable = true;
+  #system.autoUpgrade.dates = "weekly";
+
+  # Automatic cleanup
+  nix.gc = {
+    automatic = true;
+    dates = "daily";
+    options = "--delete-older-than 5d";
+  };
+  nix.settings.auto-optimise-store = true;
+
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -55,9 +67,17 @@
     enable = true;
     xwayland.enable = true;
   };
-  environment.sessionVariables = {
-    HYPRLAND_CONFIG_FILE = "~/Resources/Nixos/hyprland.conf";
-  };
+ 
+ environment.sessionVariables = {
+  WLR_NO_HARDWARE_CURSORS = "1";
+  NISOS_OZONE_WL = "1";
+ };
+
+ hardware = {
+  # enable opengl
+  graphics.enable = true;
+  nvidia.modesetting.enable = true;
+ };
 
   # Enable the Cinnamon Desktop Environment.
   #services.xserver.displayManager.lightdm.enable = true;
@@ -110,6 +130,18 @@
   # Install firefox.
   programs.firefox.enable = true;
 
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
+
+  programs.zsh.ohMyZsh = {
+    enable = true;
+    # plugins = [ "git" "sudo" "docker" "kubectl" ];
+  };
+
+  # Desktop portal for link opening, screensharing, ...
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -119,12 +151,25 @@
     git
     jetbrains.clion
     vscode
-    kitty # terminal (for hyprland)
+    kitty # terminal emulator (for hyprland)
     obsidian
     thunderbird
     discord
-    wofi # launcher
-    lxqt.lxqt-policykit
+    rofi-wayland # launcher
+    nemo # filemanager
+    (waybar.overrideAttrs (oldAttrs: {
+      mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+    })) # desktop bar
+    dunst # notification deamon
+    libnotify # notify dependency
+    swww # wallpaper manager
+    lxqt.lxqt-policykit # authenticaton manager for polkit
+    networkmanagerapplet
+  ];
+
+  fonts.packages = with pkgs; [
+    lexend
+    nerd-fonts.zed-mono
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

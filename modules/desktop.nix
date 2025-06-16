@@ -47,6 +47,11 @@
             lxqt.lxqt-policykit # authenticaton manager for polkit
             networkmanagerapplet
             wlogout # logout manager
+            hyprshot # screenshots
+            wl-clipboard # myb not needed
+            clipse  # clipboard manager
+            geeqie # image viewer
+            brightnessctl # controll brigthness
         ];
     };
 }

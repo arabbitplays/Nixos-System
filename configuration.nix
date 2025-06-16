@@ -106,6 +106,9 @@
     obsidian
     thunderbird
     discord
+    mattermost
+    libreoffice
+    spotify
   ];
 
   fonts.packages = with pkgs; [

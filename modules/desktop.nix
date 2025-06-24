@@ -8,7 +8,7 @@
 
     config = lib.mkIf config.hypr-desktop.enable {
         # Enable the X11 windowing system.
-        services.xserver.enable = true;
+        #services.xserver.enable = true;
         services.displayManager.gdm = {
             enable = true;
             wayland = true;
@@ -48,10 +48,14 @@
             networkmanagerapplet
             wlogout # logout manager
             hyprshot # screenshots
-            wl-clipboard # myb not needed
+            wl-clipboard # clipboard utility
+            wtype # needed for autopasting
             clipse  # clipboard manager
-            geeqie # image viewer
+            qimgv # image viewer
             brightnessctl # controll brigthness
+            pavucontrol # audio controllcd
+            zip
+            unzip
         ];
     };
 }

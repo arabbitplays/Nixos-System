@@ -56,6 +56,7 @@
             pavucontrol # audio controllcd
             zip
             unzip
+            xdg-utils # desktop integration for the command line
         ];
     };
 }
